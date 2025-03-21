@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+# Infinite Dataverse Search Engine
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive search engine application built with React that provides a beautiful user interface for searching across multiple data sources. Features a stunning particle animation background and seamless dark/light mode transitions.
 
-## Available Scripts
+![Search Engine Demo](demo-screenshot.png)
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+- **Beautiful Particle Animation Background**
+  - Interactive particle effects that respond to cursor movement
+  - Seamless animations and transitions
+  - Customizable particle behavior
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Advanced Search Functionality**
+  - Real-time search results
+  - Multi-source search integration (Reddit, Web, etc.)
+  - Search history tracking
+  - Clean and organized result display
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Modern UI/UX**
+  - Dark/Light mode toggle
+  - Responsive design for all screen sizes
+  - Smooth animations and transitions
+  - Elegant card-based result layout
 
-### `npm test`
+- **Accessibility**
+  - Keyboard navigation support
+  - Screen reader friendly
+  - High contrast mode
+  - Focus management
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Technologies Used
 
-### `npm run build`
+- **Frontend**
+  - React.js
+  - React Router
+  - CSS3 with modern features
+  - HTML5 Canvas for particles
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Backend**
+  - Python (Flask)
+  - Reddit API integration
+  - Web scraping capabilities
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 💻 Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/infinite-dataverse-search.git
+   ```
 
-### `npm run eject`
+2. Install frontend dependencies:
+   ```bash
+   cd search-app
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install backend dependencies:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Start the frontend development server:
+   ```bash
+   cd search-app
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. Start the backend server:
+   ```bash
+   cd backend
+   python app.py
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🔧 Configuration
 
-## Learn More
+1. Backend Configuration:
+   - Create a `.env` file in the backend directory
+   - Add your Reddit API credentials:
+     ```
+     REDDIT_CLIENT_ID=your_client_id
+     REDDIT_CLIENT_SECRET=your_client_secret
+     ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Frontend Configuration:
+   - The frontend will run on `http://localhost:3000`
+   - The backend API is configured to run on `http://localhost:5000`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🎨 Project Structure
 
-### Code Splitting
+```
+search-app/
+├── src/
+│   ├── components/
+│   │   ├── LandingPage/
+│   │   ├── SearchPage/
+│   │   ├── ParticleEffect/
+│   │   └── DarkModeToggle/
+│   ├── App.js
+│   └── App.css
+└── backend/
+    ├── app.py
+    └── requirements.txt
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🌈 Features in Detail
 
-### Analyzing the Bundle Size
+### Particle Animation
+- Interactive background with dynamic particle movement
+- Particles respond to cursor movement
+- Configurable particle density and behavior
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Search Functionality
+- Real-time search results
+- Multiple data source integration
+- Search history tracking
+- Organized result categorization
 
-### Making a Progressive Web App
+### UI Components
+- Modern, clean interface
+- Responsive design
+- Dark/Light mode toggle
+- Smooth transitions and animations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🤝 Contributing
 
-### Advanced Configuration
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### Deployment
+## 📝 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### `npm run build` fails to minify
+## 🙏 Acknowledgments
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Particle animation inspired by various open-source projects
+- UI design influenced by modern search engines
+- Special thanks to the React and Python communities
+
+## 📧 Contact
+
+Your Name - your.email@example.com
+Project Link: [https://github.com/yourusername/infinite-dataverse-search](https://github.com/yourusername/infinite-dataverse-search)

@@ -1,0 +1,96 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.landing-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    overflow: hidden;
+}
+
+#dataflowCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.landing-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+.landing-content h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.landing-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+button {
+    background: linear-gradient(135deg, #5b5bf5, #9a57ff);
+    border: none;
+    padding: 12px 30px;
+    color: #fff;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+    min-width: 200px;
+    width: auto;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #4a4aff, #8a3dff);
+}
+
+/* Vortex Animation Effect */
+.vortex-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(91, 91, 245, 0.8), rgba(154, 87, 255, 0));
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: vortex-expand 3s forwards ease-out;
+    z-index: 999;
+}
+
+@keyframes vortex-expand {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(8);
+        opacity: 0;
+    }
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

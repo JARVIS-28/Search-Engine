@@ -1,0 +1,37 @@
+.dark-mode-toggle {
+    background-color: #7f00ff;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 120px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-mode-toggle:hover {
+    transform: translateY(-2px) scale(1.02);
+    background-color: #6a00d6;
+    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.8);
+}
+
+.dark-mode-toggle:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.dark-mode-toggle:focus-visible {
+    outline: 2px solid #9a57ff;
+    outline-offset: 2px;
+}
