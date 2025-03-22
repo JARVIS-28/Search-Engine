@@ -15,9 +15,13 @@ from duckduckgo_search import DDGS
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Any
 import hashlib
+import json
 
 # Load environment variables
 load_dotenv()
+
+# Get API keys from environment
+YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 app = Flask(__name__)
 CORS(app)
@@ -281,34 +285,42 @@ def search_reddit(query, query_embedding, max_results=3):
 # YouTube Search (No API key required)
 def search_youtube(query, query_embedding, max_results=3):
     try:
-        # Use DuckDuckGo to search YouTube
-        with DDGS() as ddgs:
-            # Search specifically on YouTube
-            video_results = ddgs.videos(query)
+        if not YOUTUBE_API_KEY:
+            print("YouTube API key not found in environment variables")
+            raise Exception("YouTube API key not configured")
+
+        base_url = "https://www.googleapis.com/youtube/v3/search"
+        params = {
+            'part': 'snippet',
+            'q': query,
+            'key': YOUTUBE_API_KEY,
+            'maxResults': 10,
+            'type': 'video',
+            'relevanceLanguage': 'en'
+        }
+        
+        response = requests.get(base_url, params=params)
+        if not response.ok:
+            print(f"YouTube API error: Status code {response.status_code}")
+            print(f"Response content: {response.text}")
+            raise Exception(f"YouTube API error: {response.status_code}")
             
-            results = []
-            seen_video_ids = set()
-            count = 0
+        data = response.json()
+        results = []
+        
+        if 'items' not in data:
+            print(f"No items in YouTube response: {data}")
+            raise Exception("No items in YouTube response")
             
-            for video in video_results:
-                if count >= max_results:
-                    break
-                    
-                try:
-                    title = video.get('title', '')
-                    url = video.get('link', '')
-                    description = video.get('description', '')
-                    
-                    if not title or not url:
-                        continue
-                        
-                    # Extract video ID from URL
-                    video_id = url.split('v=')[-1].split('&')[0]
-                    
-                    if video_id in seen_video_ids:
-                        continue
-                        
-                    seen_video_ids.add(video_id)
+        for item in data['items']:
+            try:
+                video_id = item['id']['videoId']
+                snippet = item['snippet']
+                title = snippet.get('title', '')
+                description = snippet.get('description', '')
+                url = f"https://www.youtube.com/watch?v={video_id}"
+                
+                if title and url:
                     content = f"{title}. {description}"
                     
                     results.append({
@@ -319,16 +331,89 @@ def search_youtube(query, query_embedding, max_results=3):
                         "relevance": compute_similarity(query_embedding, content)
                     })
                     
-                    count += 1
-                    
-                except Exception as e:
-                    print(f"Error processing video result: {e}")
-                    continue
-                    
-            return results
-            
+            except Exception as e:
+                print(f"Error processing YouTube result: {e}")
+                continue
+                
+        # Sort by relevance and take top max_results
+        results.sort(key=lambda x: x["relevance"], reverse=True)
+        return results[:max_results]
+        
     except Exception as e:
-        print(f"YouTube search error: {e}")
+        print(f"YouTube API search error: {e}")
+        print("Falling back to web scraping method...")
+        # Fallback to scraping search results if API fails
+        try:
+            search_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(query)}"
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept-Language': 'en-US,en;q=0.9'
+            }
+            
+            response = requests.get(search_url, headers=headers)
+            if not response.ok:
+                print(f"YouTube scraping error: Status code {response.status_code}")
+                return []
+                
+            # Extract video information from the page
+            results = []
+            try:
+                # Find the initial data in the page
+                start_marker = 'var ytInitialData = '
+                end_marker = '};'
+                
+                content = response.text
+                start_idx = content.find(start_marker)
+                if start_idx == -1:
+                    return []
+                    
+                start_idx += len(start_marker)
+                end_idx = content.find(end_marker, start_idx) + 1
+                
+                json_str = content[start_idx:end_idx]
+                data = json.loads(json_str)
+                
+                # Navigate through the JSON structure to find video results
+                video_items = data.get('contents', {}).get('twoColumnSearchResultsRenderer', {}).get('primaryContents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get('itemSectionRenderer', {}).get('contents', [])
+                
+                for item in video_items[:10]:
+                    try:
+                        video_renderer = item.get('videoRenderer', {})
+                        if not video_renderer:
+                            continue
+                            
+                        video_id = video_renderer.get('videoId', '')
+                        title = video_renderer.get('title', {}).get('runs', [{}])[0].get('text', '')
+                        description = video_renderer.get('descriptionSnippet', {}).get('runs', [{}])[0].get('text', '')
+                        
+                        if video_id and title:
+                            url = f"https://www.youtube.com/watch?v={video_id}"
+                            content = f"{title}. {description}"
+                            
+                            results.append({
+                                "title": title,
+                                "url": url,
+                                "snippet": description[:200] + "..." if len(description) > 200 else description,
+                                "content": content,
+                                "relevance": compute_similarity(query_embedding, content)
+                            })
+                            
+                    except Exception as e:
+                        print(f"Error processing YouTube result item: {e}")
+                        continue
+                        
+            except Exception as e:
+                print(f"Error parsing YouTube page data: {e}")
+                return []
+                
+            # Sort by relevance and take top max_results
+            results.sort(key=lambda x: x["relevance"], reverse=True)
+            return results[:max_results]
+            
+        except Exception as e:
+            print(f"YouTube fallback search error: {e}")
+            return []
+            
         return []
 
 # Web Search using DuckDuckGo
